@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Law Connect</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="main-container">
+    <div class="button-row">
+      <button id="openSignup">SIGN UP</button>
+      <button id="openLogin">LOGIN</button>
+    </div>
+
+    <div class="logo-section">
+      <img src="lawconnect.jpg" alt="LawConnect Logo" />
+    </div>
+
+    <h1 class="site-name">LAWCONNECT</h1>
+  </div>
+
+  <!-- LOGIN Pop up -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <span class="close" id="closeLogin">&times;</span>
+      <h2>Login</h2>
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <button>Login</button>
+    </div>
+  </div>
+
+  <!-- SIGNUP Pop up -->
+  <div class="modal" id="signupModal">
+    <div class="modal-content">
+      <span class="close" id="closeSignup">&times;</span>
+      <h2>Sign Up</h2>
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <input type="password" placeholder="Confirm Password" />
+      <button>Sign Up</button>
+    </div>
+  </div>
+
+<!-- Role Selection Modal -->
+<div id="roleModal" class="modal">
+    <div class="modal-content role-modal">
+      <h2>CHOOSE<br>ACCOUNT TYPE</h2>
+      <img src="lawconnect.jpg" alt="gavel icon" />
+      <div class="role-buttons">
+        <button onclick="selectRole('lawyer')">LOGIN AS LAWYER</button>
+        <button onclick="selectRole('client')">LOGIN AS CLIENT</button>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- javascript -->
+  <script>
+    const loginModal = document.getElementById("loginModal");
+  const signupModal = document.getElementById("signupModal");
+  const roleModal = document.getElementById("roleModal");
+
+  let activeForm = ""; // 'login' or 'signup'
+  let userRole = "";   // 'lawyer' or 'client'
+
+  // Open role modal first
+  document.getElementById("openLogin").onclick = () => {
+    activeForm = "login";
+    roleModal.style.display = "flex";
+  };
+
+  document.getElementById("openSignup").onclick = () => {
+    activeForm = "signup";
+    roleModal.style.display = "flex";
+  };
+
+  // Role selection
+  function selectRole(role) {
+    userRole = role;
+    roleModal.style.display = "none";
+
+    if (activeForm === "login") {
+      loginModal.style.display = "flex";
+    } else if (activeForm === "signup") {
+      signupModal.style.display = "flex";
+    }
+  }
+
+  // Close buttons
+  document.getElementById("closeLogin").onclick = () => loginModal.style.display = "none";
+  document.getElementById("closeSignup").onclick = () => signupModal.style.display = "none";
+  document.getElementById("closeRole").onclick = () => roleModal.style.display = "none";
+
+  // Click outside to close modals
+  window.onclick = function (event) {
+    if (event.target === loginModal) loginModal.style.display = "none";
+    if (event.target === signupModal) signupModal.style.display = "none";
+    if (event.target === roleModal) roleModal.style.display = "none";
+  };
+    // SIGN UP VALIDATION
+  document.querySelector('#signupModal button').onclick = function () {
+    const inputs = document.querySelectorAll('#signupModal input');
+    const email = inputs[0].value.trim();
+    const password = inputs[1].value.trim();
+    const confirm = inputs[2].value.trim();
+
+    if (!email || !password || !confirm) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+      alert("Enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirm) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    // Send to backend (coming next)
+    registerUser(email, password);
+  };
+
+  // LOGIN VALIDATION
+  document.querySelector('#loginModal button').onclick = function () {
+    const inputs = document.querySelectorAll('#loginModal input');
+    const email = inputs[0].value.trim();
+    const password = inputs[1].value.trim();
+
+    if (!email || !password) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    loginUser(email, password);
+  };
+  </script>
+</body>
+</html>
